@@ -11,8 +11,8 @@ YUI().use('node', function (Y) {
         socket.emit('message', 'Message Sent on ' + new Date());
     });
 
-    socket.on('server_message', function(data){
-     receiver.append('<li>' + data + '</li>');  
+    socket.on('commandRan', function(data){
+     receiver.append('<li>' + data.stdout + '</li>');
     });
 
 });

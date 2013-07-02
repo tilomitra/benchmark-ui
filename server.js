@@ -7,7 +7,9 @@ var http    = require('http'),
     app     = express(),
     port    = (process.env.PORT || 8000),
     server  = app.listen(port, 'localhost'),
-    io = require('socket.io').listen(server);
+    io = require('socket.io').listen(server),
+    routes  = require('./lib/routes');
+
 
 //server.listen(8000);
 //Setup Express App
@@ -28,7 +30,7 @@ app.configure(function(){
       // allowing you to respond however you like
       if (err instanceof NotFound) {
           res.render('404');
-      } 
+      }
       else {
           res.render('500');
       }
@@ -40,10 +42,7 @@ app.configure(function(){
 //Setup Socket.IO
 io.sockets.on('connection', function(socket){
   console.log('Client Connected');
-  socket.on('message', function(data){
-    socket.broadcast.emit('app_message',data);
-    socket.emit('app_message',data);
-  });
+  socket.on('message', routes.runCommand);
   socket.on('disconnect', function(){
     console.log('Client Disconnected.');
   });
